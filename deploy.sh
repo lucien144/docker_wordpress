@@ -37,8 +37,8 @@ do
               esac
             done
 
-            git pull
-
+            git config pull.ff only
+            git pull --recurse-submodules
             docker-compose --profile production -p "$PROJECT_NAME" up -d --force-recreate --remove-orphans --build
             docker exec -it "${PROJECT_NAME}__wordpress" composer install
 
