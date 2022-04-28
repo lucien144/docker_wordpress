@@ -18,7 +18,7 @@ Usage: deploy.sh -w
 
 ### `.env`
 
-```.env
+```ini
 PROJECT_NAME='project' # Name of the project. Used to name the docker containers.
 VOLUME='shared_volume' # For production -> creates the shared volume.
 VOLUME='./wordpress' # For local development, binds the directory to a volume
@@ -34,4 +34,19 @@ HOST_ADMINER='adminer.project.test' # Host of the Adminer.
 
 ADMINER_USER='...' # Adminer username.
 ADMINER_PASSWORD='...' # Adminer password.
+```
+
+## Adminer
+If you want to put basic HTTP authentication in front of Adminer, you must uncomment these lines in `docker-compose.yaml`:
+
+```ini
+      - traefik.http.routers.${PROJECT_NAME}__adminer.middlewares=${PROJECT_NAME}__adminer-auth
+      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+      - traefik.http.middlewares.${PROJECT_NAME}__adminer-auth.basicauth.users=${ADMINER_USER}:${ADMINER_PASSWORD}
+```
+
+Then generate the username/password and update them in the `.env` file.
+
+```bash
+$ echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
 ```
