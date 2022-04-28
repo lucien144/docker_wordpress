@@ -1,5 +1,5 @@
 # Dockerized Wordpress
-Dockerized Bedrock (Wordpress) with Nginx, MySQL, Imgproxy and S3 backups running on Traefik.
+Dockerized [Bedrock (Wordpress)](https://roots.io/bedrock/) with Nginx, MySQL, [Imgproxy](https://imgproxy.net/) and S3 backups running on [Traefik](https://github.com/traefik/traefik).
 
 ## Run
 
