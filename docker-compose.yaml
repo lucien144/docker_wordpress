@@ -1,0 +1,111 @@
+version: '3'
+
+volumes:
+  shared_volume:
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
+services:
+
+  mysql:
+    container_name: ${PROJECT_NAME}__mysql
+    image: mysql:latest
+    restart: always
+    env_file: .env.mysql
+    ports:
+      - ${PORT_MYSQL}:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - internal
+
+  imgproxy:
+    image: darthsim/imgproxy:latest
+    container_name: ${PROJECT_NAME}__imgproxy
+    env_file: .env.imgproxy
+    ports:
+      - ${PORT_IMGPROXY}:8080
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.http.routers.${PROJECT_NAME}__imgproxy.rule=Host(`${HOST_IMAGES}`)
+      - traefik.http.routers.${PROJECT_NAME}__imgproxy.tls=true
+      - traefik.http.routers.${PROJECT_NAME}__imgproxy.tls.certresolver=lets-encrypt
+      - traefik.port=${PORT_IMGPROXY}
+
+  wordpress:
+    container_name: ${PROJECT_NAME}__wordpress
+    build:
+      context: ./wordpress/
+    env_file: .env.wordpress
+    restart: always
+    volumes:
+      - "${VOLUME}:/var/www/html"
+      - ./uploads:/var/www/html/web/app/uploads
+    depends_on:
+      - mysql
+    networks:
+      - internal
+      - web
+
+  nginx:
+    container_name: ${PROJECT_NAME}__nginx
+    build:
+      context: ./nginx/
+    ports:
+      - ${PORT_NGINX}:80
+    volumes:
+      - "${VOLUME}:/var/www/html"
+      - ./uploads:/var/www/html/web/app/uploads
+      - ./nginx/templates:/etc/nginx/templates
+    restart: always
+    environment:
+      - PROJECT_NAME=${PROJECT_NAME}
+    depends_on:
+      - wordpress
+      - mysql
+    labels:
+      - traefik.http.routers.${PROJECT_NAME}__nginx.rule=Host(`${HOST_WORDPRESS}`)
+      - traefik.http.routers.${PROJECT_NAME}__nginx.tls=true
+      - traefik.http.routers.${PROJECT_NAME}__nginx.tls.certresolver=lets-encrypt
+      - traefik.port=${PORT_NGINX}
+    networks:
+      - internal
+      - web
+
+  adminer:
+    container_name: ${PROJECT_NAME}__adminer
+    image: adminer:latest
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: mysqldb
+    ports:
+      - ${PORT_ADMINER}:8080
+    labels:
+      - traefik.http.routers.${PROJECT_NAME}__adminer.rule=Host(`${HOST_ADMINER}`)
+      - traefik.http.routers.${PROJECT_NAME}__adminer.tls=true
+      - traefik.http.routers.${PROJECT_NAME}__adminer.tls.certresolver=lets-encrypt
+      #- traefik.http.routers.${PROJECT_NAME}__adminer.middlewares=${PROJECT_NAME}__adminer-auth
+      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+      #- traefik.http.middlewares.${PROJECT_NAME}__adminer-auth.basicauth.users=${ADMINER_USER}:${ADMINER_PASSWORD}
+      - traefik.port=${PORT_ADMINER}
+    networks:
+      - internal
+      - web
+    depends_on:
+      - mysql
+
+  backup:
+    container_name: ${PROJECT_NAME}__backup
+    image: futurice/docker-volume-backup
+    restart: always
+    env_file:
+      - .env.backup
+    volumes:
+      - ./:/backup
+    profiles: ["production"]
