@@ -23,7 +23,7 @@ do
             docker rm -f "${PROJECT_NAME}__wordpress" "${PROJECT_NAME}__nginx"
 
             # Remove shared volume
-            docker volume rm "${PROJECT_NAME}_shared_volume"
+            docker volume rm "${PROJECT_NAME}_${VOLUME}"
 
             while getopts 'wfa' c
             do
