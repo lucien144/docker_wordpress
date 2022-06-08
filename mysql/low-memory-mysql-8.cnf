@@ -1,0 +1,71 @@
+# Reference: https://github.com/alexanderkoller/low-memory-mysql/blob/master/low-memory-my.cnf
+#
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/8.0/en/server-configuration-defaults.html
+
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+innodb_buffer_pool_size = 64M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+skip-host-cache
+skip-name-resolve
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+#secure-file-priv=/var/lib/mysql-files
+user=mysql
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+#log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+
+#### Reduces the memory usage of MySQL by setting values to their minimum
+#### http://www.tocker.ca/2014/03/10/configuring-mysql-to-use-minimal-memory.html
+
+#### Tip: Doing this is hacky. Optimizing values will result in better performance.
+#### If you have time consider a script like MySQLTuner to start learning about optimization
+#### See: https://github.com/major/MySQLTuner-perl. [ And change: performance_schema = on ]
+
+## Global values
+innodb_buffer_pool_size=5M          #MySQL 8 default: 134217728 (128M)
+innodb_log_buffer_size=256K         #MySQL 8 default: 16777216 (16M)
+#query_cache_size=0                  #MySQL 8 default: REMOVED in 8. Deprecated in MySQL 5.7.20
+max_connections=10                  #MySQL 8 default: 151
+key_buffer_size=8                   #MySQL 8 default: 8388608 (8M)
+thread_cache_size=0                 #MySQL 8 default: (autosized)
+host_cache_size=0                   #MySQL 8 default: (autosized)
+innodb_ft_cache_size=1600000        #MySQL 8 default: 8000000
+innodb_ft_total_cache_size=32000000 #MySQL 8 default: 640000000
+
+## Per thread or per operation values
+thread_stack=262144                 #MySQL 8 default: 1048576 (1M) Default increased in MySQL 8.0.27 by 4x
+sort_buffer_size=32K                #MySQL 8 default: 262144 (256K)
+read_buffer_size=8200               #MySQL 8 default: 131072 (128K)
+read_rnd_buffer_size=8200           #MySQL 8 default: 262144 (256K)
+max_heap_table_size=16K             #MySQL 8 default: 16777216 (16M)
+tmp_table_size=1K                   #MySQL 8 default: 16777216 (16M)
+bulk_insert_buffer_size=0           #MySQL 8 default: 8388608 (8M)
+join_buffer_size=128                #MySQL 8 default: 262144 (256K)
+net_buffer_length=1K                #MySQL 8 default: 16384 (16K)
+innodb_sort_buffer_size=64K         #MySQL 8 default: 1048576 (1M)
+
+## Settings that relate to the binary log (if enabled)
+binlog_cache_size=4K                #MySQL 8 default: 32768 (32K)
+binlog_stmt_cache_size=4K           #MySQL 8 default: 32768 (32K)
+
+#### Turn off monitoring. Reduces memory usage
+performance_schema = off
