@@ -14,13 +14,13 @@ services:
   mysql:
     container_name: ${PROJECT_NAME}__mysql
     image: mysql:8.0
-    restart: always
+    restart: unless-stopped
     env_file: .env.mysql
     ports:
       - ${PORT_MYSQL}:3306
     volumes:
-      - ./mysql/data:/var/lib/mysql
-      - ./mysql/low-memory-mysql-8.cnf:/etc/mysql/conf.d/low-memory-my.cnf
+      - ./volumes/mysql-data:/var/lib/mysql
+      - ./config/low-memory-mysql-8.cnf:/etc/mysql/conf.d/low-memory-my.cnf
     networks:
       - internal
 
@@ -42,47 +42,31 @@ services:
   wordpress:
     container_name: ${PROJECT_NAME}__wordpress
     build:
-      context: ./wordpress/
+      context: .
     env_file: .env.wordpress
-    restart: always
+    environment:
+      - PROJECT_NAME=${PROJECT_NAME}
+    restart: unless-stopped
     volumes:
       - "${VOLUME}:/var/www/html"
-      - ./uploads:/var/www/html/web/app/uploads
+      - ./volumes/uploads:/var/www/html/web/app/uploads
     depends_on:
       - mysql
     networks:
       - internal
       - web
-
-  nginx:
-    container_name: ${PROJECT_NAME}__nginx
-    build:
-      context: ./nginx/
     ports:
       - ${PORT_NGINX}:80
-    volumes:
-      - "${VOLUME}:/var/www/html"
-      - ./uploads:/var/www/html/web/app/uploads
-      - ./nginx/templates:/etc/nginx/templates
-    restart: always
-    environment:
-      - PROJECT_NAME=${PROJECT_NAME}
-    depends_on:
-      - wordpress
-      - mysql
     labels:
       - traefik.http.routers.${PROJECT_NAME}__nginx.rule=Host(`${HOST_WORDPRESS}`)
       - traefik.http.routers.${PROJECT_NAME}__nginx.tls=true
       - traefik.http.routers.${PROJECT_NAME}__nginx.tls.certresolver=lets-encrypt
       - traefik.port=${PORT_NGINX}
-    networks:
-      - internal
-      - web
 
   adminer:
     container_name: ${PROJECT_NAME}__adminer
     image: adminer:latest
-    restart: always
+    restart: unless-stopped
     environment:
       ADMINER_DEFAULT_SERVER: ${PROJECT_NAME}__mysql
     ports:
@@ -104,7 +88,7 @@ services:
   backup:
     container_name: ${PROJECT_NAME}__backup
     image: futurice/docker-volume-backup
-    restart: always
+    restart: unless-stopped
     env_file:
       - .env.backup
     volumes:

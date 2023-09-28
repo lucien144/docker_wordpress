@@ -4,3 +4,6 @@ uploads/*
 !uploads/.gitkeep
 .env*
 !*.example
+volumes/mysql-data/*
+!volumes/mysql-data/.gitkeep
+
