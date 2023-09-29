@@ -1,5 +1,13 @@
 # Dockerized Wordpress
-Dockerized [Bedrock (Wordpress)](https://roots.io/bedrock/) with Nginx, MySQL, [Imgproxy](https://imgproxy.net/) and S3 backups running on [Traefik](https://github.com/traefik/traefik).
+Dockerized [Bedrock (Wordpress)](https://roots.io/bedrock/) running on [Traefik](https://github.com/traefik/traefik) with:
+
+- PHP8 (php-fpm)
+- Nginx
+- Supervisor (checking nginx and php-fpm)
+- MySQL 8
+- Adminer
+- [Imgproxy](https://imgproxy.net/) (optional)
+- S3 backups (optional)
 
 ## Run
 
@@ -49,4 +57,13 @@ Then generate the username/password and update them in the `.env` file.
 
 ```bash
 $ echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+```
+
+## Wordpress upgrade & plugins installation
+
+See https://roots.io/bedrock/docs/composer/.
+
+```bash
+composer require wpackagist-plugin/akismet
+composer require roots/wordpress:X.Y -W
 ```
