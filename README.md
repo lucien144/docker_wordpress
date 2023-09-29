@@ -9,6 +9,16 @@ Dockerized [Bedrock (Wordpress)](https://roots.io/bedrock/) running on [Traefik]
 - [Imgproxy](https://imgproxy.net/) (optional)
 - S3 backups (optional)
 
+## Installation
+
+
+### Local installation
+
+```bash
+git clone git@github.com:lucien144/docker_wordpress.git .
+./deploy.sh -w # Choose option 2
+```
+
 ## Run
 
 ```bash
