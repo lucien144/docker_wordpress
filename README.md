@@ -58,12 +58,3 @@ Then generate the username/password and update them in the `.env` file.
 ```bash
 $ echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
 ```
-
-## Wordpress upgrade & plugins installation
-
-See https://roots.io/bedrock/docs/composer/.
-
-```bash
-composer require wpackagist-plugin/akismet
-composer require roots/wordpress:X.Y -W
-```

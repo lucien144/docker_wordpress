@@ -58,7 +58,6 @@
     "roots/wp-password-bcrypt": "1.1.0",
     "wpackagist-plugin/disable-comments": "2.4",
     "wpackagist-plugin/disable-gutenberg": "2.8",
-    "advanced-custom-fields/advanced-custom-fields-pro": "6.0.4",
     "wpackagist-plugin/post-types-order": "1.9.9",
     "rakit/validation": "^1.4",
     "mailgun/mailgun-php": "^3.5",
