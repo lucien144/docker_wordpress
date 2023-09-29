@@ -22,6 +22,26 @@ Usage: deploy.sh -w
 3) Quit
 ```
 
+
+## Wordpress
+
+### Pre-installed plugins
+
+- Disable Guttenberg
+- Disable Comments
+- Post Types Order
+
+### Upgrade & plugins installation
+
+See https://roots.io/bedrock/docs/composer/.
+
+```bash
+composer require wpackagist-plugin/akismet
+composer require roots/wordpress:X.Y -W
+```
+
+To install ACF, read this https://www.advancedcustomfields.com/resources/installing-acf-pro-with-composer/.
+
 ## Env
 
 ### `.env`
