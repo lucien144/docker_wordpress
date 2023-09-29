@@ -92,5 +92,5 @@ services:
     env_file:
       - .env.backup
     volumes:
-      - ./:/backup
+      - ./volumes:/backup
     profiles: ["production"]
