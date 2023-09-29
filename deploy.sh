@@ -17,7 +17,7 @@ do
         "Production")
             echo "Deploying production environment..."
 
-            chmod -Rf 0777 ./uploads/
+            chmod -Rf 0777 ./volumes/wordpress-uploads/
 
             # Remove all containers
             docker rm -f "${PROJECT_NAME}__wordpress" "${PROJECT_NAME}__nginx"
