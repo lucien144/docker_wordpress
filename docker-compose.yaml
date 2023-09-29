@@ -43,6 +43,7 @@ services:
     container_name: ${PROJECT_NAME}__wordpress
     build:
       context: .
+      no_cache: true
     env_file: .env.wordpress
     environment:
       - PROJECT_NAME=${PROJECT_NAME}
