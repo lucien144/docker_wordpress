@@ -76,7 +76,7 @@ services:
       - traefik.http.routers.${PROJECT_NAME}__adminer.tls=true
       - traefik.http.routers.${PROJECT_NAME}__adminer.tls.certresolver=lets-encrypt
       #- traefik.http.routers.${PROJECT_NAME}__adminer.middlewares=${PROJECT_NAME}__adminer-auth
-      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\\\\$/g
       #- traefik.http.middlewares.${PROJECT_NAME}__adminer-auth.basicauth.users=${ADMINER_USER}:${ADMINER_PASSWORD}
       - traefik.port=${PORT_ADMINER}
     networks:

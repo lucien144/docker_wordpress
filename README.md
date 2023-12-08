@@ -79,12 +79,12 @@ If you want to put basic HTTP authentication in front of Adminer, you must uncom
 
 ```ini
       - traefik.http.routers.${PROJECT_NAME}__adminer.middlewares=${PROJECT_NAME}__adminer-auth
-      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\\\\$/g
       - traefik.http.middlewares.${PROJECT_NAME}__adminer-auth.basicauth.users=${ADMINER_USER}:${ADMINER_PASSWORD}
 ```
 
-Then generate the username/password and update them in the `.env` file.
+Then generate the username/password and update them in the `.env` file. The `$` in the password must be escaped with `\`, not `$` as documentation says (because we are entering the password in ENV variable).
 
 ```bash
-$ echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+$ echo $(htpasswd -nb user password) | sed -e s/\\$/\\\\\$/g # -> "user:\$apr1\$73stTUVv\$.87JI.DEBDIJVfGapvYwb."
 ```
