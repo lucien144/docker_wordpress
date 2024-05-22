@@ -1,0 +1,4 @@
+#menu { border-left: 1em solid #f00; min-height: 100%; }
+#menu h1 a { color: #f00 }
+#content { margin-left: 22em }
+#breadcrumb { left: 22em }

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   shared_volume:
@@ -10,7 +10,6 @@ networks:
     external: false
 
 services:
-
   mysql:
     container_name: ${PROJECT_NAME}__mysql
     image: mysql:8.0
@@ -84,6 +83,9 @@ services:
       - web
     depends_on:
       - mysql
+    volumes:
+      - ./config/adminer/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+      - ./config/adminer/adminer.css:/var/www/html:ro
 
   backup:
     container_name: ${PROJECT_NAME}__backup
