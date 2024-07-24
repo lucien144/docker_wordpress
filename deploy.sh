@@ -20,7 +20,7 @@ do
             chmod -Rf 0777 ./volumes/wordpress-uploads/
 
             # Remove all containers
-            docker rm -f "${PROJECT_NAME}__wordpress" "${PROJECT_NAME}__nginx"
+            docker rm -f "${PROJECT_NAME}__wordpress"
 
             # Remove shared volume
             docker volume rm "${PROJECT_NAME}_${VOLUME}"
@@ -31,7 +31,7 @@ do
                 w)
                   # Remove WP image to rebuild it
                   echo "-> Rebuilding Wordpress"
-                  docker rmi -f "${PROJECT_NAME}_wordpress" "${PROJECT_NAME}_nginx"
+                  docker rmi -f "${PROJECT_NAME}_wordpress"
                   ;;
                 *) ;;
               esac
@@ -56,7 +56,7 @@ do
             export VOLUME="./wordpress"
 
             # Remove all containers
-            docker rm -f "${PROJECT_NAME}__wordpress" "${PROJECT_NAME}__nginx" "${PROJECT_NAME}__adminer"
+            docker rm -f "${PROJECT_NAME}__wordpress" "${PROJECT_NAME}__adminer"
 
             git config pull.ff only
             git pull --recurse-submodules
