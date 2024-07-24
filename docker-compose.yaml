@@ -85,7 +85,7 @@ services:
       - mysql
     volumes:
       - ./config/adminer/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
-      - ./config/adminer/adminer.css:/var/www/html:ro
+      - ./config/adminer/adminer.css:/var/www/html/adminer.css:ro
 
   backup:
     container_name: ${PROJECT_NAME}__backup
